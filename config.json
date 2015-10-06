@@ -1,0 +1,38 @@
+{
+  "apikey": {
+	"label": "API Key",
+	"type": "String",
+	"required": true,
+	"help": "Sendgrid API Key."
+  },
+  "default": {
+	"label": "Use Default Settings",
+	"type": "Boolean",
+	"required": true,
+	"help": "If true it will use the settings in the config, If false it will use the json data to build the email."
+  },
+  "to": {
+	"label": "To",
+	"type": "Email",
+	"required": true,
+	"help": "Email address of the recepient."
+  },
+  "from": {
+	"label": "From",
+	"type": "Email",
+	"required": true,
+	"help": "Email address of the sender."
+  },
+  "subject": {
+	"label": "Subject",
+	"type": "String",
+	"required": false,
+	"help": "(Optional) Subject of the email."
+  },
+  "body": {
+	"label": "Body",
+	"type": "String",
+	"required": false,
+	"help": "(Optional) email body that will be appended with the data."
+  }
+}
