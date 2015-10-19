@@ -1,45 +1,47 @@
 'use strict';
 
-var platform = require('./platform'),
+var isJSON   = require('is-json'),
+	platform = require('./platform'),
 	sendgrid, config;
-
-
-/*
- * Listen for the ready event.
- */
-platform.once('ready', function (options) {
-
-	sendgrid = require('sendgrid')(options.apikey);
-	config = options;
-
-	platform.log('Sendgrid Coneector Initialized.');
-	platform.notifyReady();
-});
 
 /*
  * Listen for the data event.
  */
 platform.on('data', function (data) {
+	if (isJSON(data, true)) {
+		var params = {
+			to: data.to || config.to,
+			from: data.from || config.from,
+			subject: data.subject || config.subject
+		};
 
-	var email_config = {};
+		delete data.to;
+		delete data.from;
+		delete data.subject;
+		delete data.body;
 
-	if (config.defaukt) {
-		email_config.to = config.to;
-		email_config.from = config.from;
-		email_config.subject = config.subject;
-		email_config.text = config.body + '\n' + JSON.stringify(data); // append data in email
-	}  else {
-		email_config.to = data.to;
-		email_config.from = data.from;
-		email_config.subject = data.subject;
-		email_config.text = data.body;
+		params.html = data.body || ((config.body || '') + '\n\n' + JSON.stringify(data, null, 4));
+
+		console.log(JSON.stringify(params));
+
+		sendgrid.send(params, function (error) {
+			if (error) {
+				console.error(error);
+				platform.handleException(error);
+			}
+		});
 	}
+	else
+		platform.handleException(new Error('Invalid data ' + data));
+});
 
-	sendgrid.send(email_config, function(error, json) {
-		if (error) {
-			console.error(error);
-			platform.handleException(error);
-		}
-	});
+/*
+ * Listen for the ready event.
+ */
+platform.once('ready', function (options) {
+	sendgrid = require('sendgrid')(options.apikey);
+	config = options;
 
+	platform.log('Sendgrid Connector Initialized.');
+	platform.notifyReady();
 });
