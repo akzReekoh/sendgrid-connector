@@ -5,17 +5,11 @@
 	"required": true,
 	"help": "Sendgrid API Key."
   },
-  "default": {
-	"label": "Use Default Settings",
-	"type": "Boolean",
-	"required": true,
-	"help": "If true it will use the settings in the config, If false it will use the json data to build the email."
-  },
   "to": {
 	"label": "To",
 	"type": "Email",
 	"required": true,
-	"help": "Email address of the recepient."
+	"help": "Email address of the recipient."
   },
   "from": {
 	"label": "From",

@@ -1,7 +1,7 @@
 {
-  "name": "connector-plugin-seed",
-  "description": "Connector Plugin seed project for the Reekoh IoT Platform. Helps engineers to start developing connector plugins for the Reekoh IoT Platform.",
-  "version": "0.0.1",
+  "name": "sendgrid-connector",
+  "description": "Sendgrid Connector Plugin for the Reekoh IoT platform. Integrates a Reekoh instance with Sendgrid to send emails.",
+  "version": "0.1.0",
   "author": "Reekoh, Inc.",
   "main": "app.js",
   "scripts": {
@@ -9,18 +9,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Reekoh/connector-plugin-seed"
+    "url": "https://github.com/Reekoh/sendgrid-connector"
   },
   "dependencies": {
+    "is-json": "^1.2.5",
     "sendgrid": "^1.9.2"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-cli": "^0.3.0",
     "gulp-jshint": "^1.11.2",
-    "gulp-jsonlint": "^1.1.1",
+    "gulp-json-lint": "^0.1.0",
     "gulp-mocha": "^2.1.3",
     "gulp-plumber": "^1.0.1",
-    "mocha": "^2.3.3"
+    "mocha": "^2.3.3",
+    "should": "^7.1.0"
   }
 }
