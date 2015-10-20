@@ -7,13 +7,13 @@
   },
   "to": {
 	"label": "To",
-	"type": "Email",
+	"type": "String",
 	"required": true,
 	"help": "Email address of the recipient."
   },
   "from": {
 	"label": "From",
-	"type": "Email",
+	"type": "String",
 	"required": true,
 	"help": "Email address of the sender."
   },
