@@ -29,10 +29,16 @@ platform.on('data', function (data) {
 				console.error(error);
 				platform.handleException(error);
 			}
+			else {
+				platform.log(JSON.stringify({
+					title: 'Sengrid Email Sent',
+					data: params
+				}));
+			}
 		});
 	}
 	else
-		platform.handleException(new Error('Invalid data ' + data));
+		platform.handleException(new Error('Invalid data received. ' + data));
 });
 
 /*
