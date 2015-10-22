@@ -11,10 +11,16 @@ var cp     = require('child_process'),
 	connector;
 
 describe('Connector', function () {
-	this.slow(5000);
+	this.slow(8000);
 
 	after('terminate child process', function () {
-		connector.kill('SIGKILL');
+		connector.send({
+			type: 'close'
+		});
+
+		setTimeout(function() {
+			connector.kill('SIGKILL');
+		}, 3000);
 	});
 
 	describe('#spawn', function () {
@@ -24,8 +30,8 @@ describe('Connector', function () {
 	});
 
 	describe('#handShake', function () {
-		it('should notify the parent process when ready within 5 seconds', function (done) {
-			this.timeout(5000);
+		it('should notify the parent process when ready within 8 seconds', function (done) {
+			this.timeout(8000);
 
 			connector.on('message', function (message) {
 				if (message.type === 'ready')
