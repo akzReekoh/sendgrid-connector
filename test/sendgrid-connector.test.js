@@ -14,7 +14,13 @@ describe('Connector', function () {
 	this.slow(8000);
 
 	after('terminate child process', function () {
-		connector.kill('SIGKILL');
+		connector.send({
+			type: 'close'
+		});
+
+		setTimeout(function() {
+			connector.kill('SIGKILL');
+		}, 3000);
 	});
 
 	describe('#spawn', function () {

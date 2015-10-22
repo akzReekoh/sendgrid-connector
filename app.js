@@ -1,13 +1,14 @@
 'use strict';
 
-var isJSON   = require('is-json'),
-	platform = require('./platform'),
+var platform = require('./platform'),
 	sendgrid, config;
 
 /*
  * Listen for the data event.
  */
 platform.on('data', function (data) {
+	var isJSON = require('is-json');
+
 	if (isJSON(data, true)) {
 		var params = {
 			to: data.to || config.to,
@@ -39,6 +40,13 @@ platform.on('data', function (data) {
 	}
 	else
 		platform.handleException(new Error('Invalid data received. ' + data));
+});
+
+/*
+ * Event to listen to in order to gracefully release all resources bound to this service.
+ */
+platform.on('close', function () {
+	platform.notifyClose();
 });
 
 /*
