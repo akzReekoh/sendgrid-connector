@@ -9,13 +9,31 @@
 	"label": "To",
 	"type": "String",
 	"required": true,
-	"help": "Email address of the recipient."
+	"help": "Email address or addresses of the recipient/s (separated by comma)."
+  },
+  "cc": {
+	"label": "CC",
+	"type": "String",
+	"required": false,
+	"help": "(Optional) CC email address or addresses (separated by comma)."
+  },
+  "bcc": {
+	"label": "BCC",
+	"type": "String",
+	"required": false,
+	"help": "(Optional) BCC email address or addresses (separated by comma)."
   },
   "from": {
 	"label": "From",
 	"type": "String",
 	"required": true,
 	"help": "Email address of the sender."
+  },
+  "reply_to": {
+	"label": "Reply To",
+	"type": "String",
+	"required": false,
+	"help": "(Optional) Reply to email address."
   },
   "subject": {
 	"label": "Subject",
@@ -25,8 +43,8 @@
   },
   "body": {
 	"label": "Body",
-	"type": "String",
+	"type": "Text",
 	"required": false,
-	"help": "(Optional) email body that will be appended with the data."
+	"help": "(Optional) Default email body that will be appended with the data."
   }
 }
