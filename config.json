@@ -45,6 +45,6 @@
 	"label": "Body",
 	"type": "Text",
 	"required": false,
-	"help": "(Optional) Default email body that will be appended with the data. Can be HTML."
+	"help": "(Optional) Default email body that will be appended with the data."
   }
 }

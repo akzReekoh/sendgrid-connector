@@ -1,9 +1,8 @@
 'use strict';
 
 const API_KEY  = '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',
-	  TO       = 'dev@reekoh.com',
-	  CC       = 'dale@reekoh.com',
-	  FROM     = 'bsicam@reekoh.com',
+	  TO       = 'bsicam@reekoh.com',
+	  FROM     = 'help@reekoh.com',
 	  REPLY_TO = 'hello@reekoh.com',
 	  SUBJECT  = 'Sendgrid Connector Notification',
 	  BODY     = 'Test Email Notification';
@@ -46,7 +45,6 @@ describe('Connector', function () {
 					options: {
 						apikey: API_KEY,
 						to: TO,
-						cc: CC,
 						from: FROM,
 						reply_to: REPLY_TO
 					}

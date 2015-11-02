@@ -11,7 +11,9 @@ platform.on('data', function (data) {
 	var isJSON = require('is-json');
 
 	if (isJSON(data, true)) {
-		var to, cc, bcc, replyTo, subject;
+		console.log(data);
+
+		var to, cc, bcc, replyTo, subject, body;
 
 		if (!_.isEmpty(data.to))
 			data.to = data.to.split(',');
@@ -47,6 +49,11 @@ platform.on('data', function (data) {
 		else
 			subject = config.subject;
 
+		if (!_.isEmpty(data.body))
+			body = data.body;
+		else
+			body = config.body;
+
 		if (_.isEmpty(to))
 			return platform.handleException(new Error('Kindly specify email recipients.'));
 
@@ -69,12 +76,10 @@ platform.on('data', function (data) {
 		if (!_.isEmpty(replyTo))
 			params.replyto = replyTo;
 
-		params.html = data.body || config.body;
-
-		if (_.isEmpty(params.html))
-			params.html = JSON.stringify(data, null, 4);
+		if (_.isEmpty(body))
+			params.text = JSON.stringify(data, null, 4);
 		else
-			params.html = params.html + '<br/><br/>' + JSON.stringify(data, null, 4);
+			params.text = body + '\n\n' + JSON.stringify(data, null, 4);
 
 		console.log(JSON.stringify(params));
 
