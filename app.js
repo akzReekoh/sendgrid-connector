@@ -11,8 +11,6 @@ platform.on('data', function (data) {
 	var isJSON = require('is-json');
 
 	if (isJSON(data, true)) {
-		console.log(data);
-
 		var to, cc, bcc, replyTo, subject, body;
 
 		if (!_.isEmpty(data.to))
@@ -80,8 +78,6 @@ platform.on('data', function (data) {
 			params.text = JSON.stringify(data, null, 4);
 		else
 			params.text = body + '\n\n' + JSON.stringify(data, null, 4);
-
-		console.log(JSON.stringify(params));
 
 		sendgrid.send(params, function (error) {
 			if (error) {
