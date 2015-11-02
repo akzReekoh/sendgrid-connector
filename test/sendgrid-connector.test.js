@@ -1,10 +1,12 @@
 'use strict';
 
-var API_KEY = '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',
-	TO      = 'support@reekoh.com',
-	FROM    = 'bsicam@reekoh.com',
-	SUBJECT = 'Sendgrid Connector',
-	BODY    = 'Test Mail';
+const API_KEY  = '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',
+	  TO       = 'dev@reekoh.com',
+	  CC       = 'dale@reekoh.com',
+	  FROM     = 'bsicam@reekoh.com',
+	  REPLY_TO = 'hello@reekoh.com',
+	  SUBJECT  = 'Sendgrid Connector Notification',
+	  BODY     = 'Test Email Notification';
 
 var cp     = require('child_process'),
 	should = require('should'),
@@ -18,7 +20,7 @@ describe('Connector', function () {
 			type: 'close'
 		});
 
-		setTimeout(function() {
+		setTimeout(function () {
 			connector.kill('SIGKILL');
 		}, 3000);
 	});
@@ -44,7 +46,9 @@ describe('Connector', function () {
 					options: {
 						apikey: API_KEY,
 						to: TO,
-						from: FROM
+						cc: CC,
+						from: FROM,
+						reply_to: REPLY_TO
 					}
 				}
 			}, function (error) {

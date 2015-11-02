@@ -1,6 +1,7 @@
 'use strict';
 
-var platform = require('./platform'),
+var _        = require('lodash'),
+	platform = require('./platform'),
 	sendgrid, config;
 
 /*
@@ -10,10 +11,54 @@ platform.on('data', function (data) {
 	var isJSON = require('is-json');
 
 	if (isJSON(data, true)) {
+		var to, cc, bcc, replyTo, subject;
+
+		if (!_.isEmpty(data.to))
+			data.to = data.to.split(',');
+
+		if (!_.isEmpty(data.cc))
+			data.cc = data.cc.split(',');
+
+		if (!_.isEmpty(data.bcc))
+			data.bcc = data.bcc.split(',');
+
+		if (!_.isEmpty(data.to))
+			to = data.to;
+		else
+			to = config.to;
+
+		if (!_.isEmpty(data.cc))
+			cc = data.cc;
+		else
+			cc = config.cc;
+
+		if (!_.isEmpty(data.bcc))
+			bcc = data.bcc;
+		else
+			bcc = config.bcc;
+
+		if (!_.isEmpty(data.reply_to))
+			replyTo = data.reply_to;
+		else
+			replyTo = config.reply_to;
+
+		if (!_.isEmpty(data.subject))
+			subject = data.subject;
+		else
+			subject = config.subject;
+
+		if (_.isEmpty(to))
+			return platform.handleException(new Error('Kindly specify email recipients.'));
+
+		if (_.isEmpty(subject))
+			return platform.handleException(new Error('Kindly specify email subject.'));
+
 		var params = {
-			to: data.to || config.to,
+			to: to,
+			cc: cc,
+			bcc: bcc,
 			from: data.from || config.from,
-			subject: data.subject || config.subject
+			subject: subject
 		};
 
 		delete data.to;
@@ -21,7 +66,15 @@ platform.on('data', function (data) {
 		delete data.subject;
 		delete data.body;
 
-		params.html = data.body || ((config.body || '') + '\n\n' + JSON.stringify(data, null, 4));
+		if (!_.isEmpty(replyTo))
+			params.replyto = replyTo;
+
+		params.html = data.body || config.body;
+
+		if (_.isEmpty(params.html))
+			params.html = JSON.stringify(data, null, 4);
+		else
+			params.html = params.html + '<br/><br/>' + JSON.stringify(data, null, 4);
 
 		console.log(JSON.stringify(params));
 
@@ -55,6 +108,15 @@ platform.on('close', function () {
 platform.once('ready', function (options) {
 	sendgrid = require('sendgrid')(options.apikey);
 	config = options;
+
+	if (!_.isEmpty(config.to))
+		config.to = config.to.split(',');
+
+	if (!_.isEmpty(config.cc))
+		config.cc = config.cc.split(',');
+
+	if (!_.isEmpty(config.bcc))
+		config.bcc = config.bcc.split(',');
 
 	platform.log('Sendgrid Connector Initialized.');
 	platform.notifyReady();
