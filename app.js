@@ -10,73 +10,52 @@ var isEmpty       = require('lodash.isempty'),
  */
 platform.on('data', function (data) {
 	if (isPlainObject(data)) {
-		var to, cc, bcc, replyTo, subject, body;
-
-		if (!isEmpty(data.to))
+		
+		if (isEmpty(data.to))
+			data.to = config.to.split(',');
+		else
 			data.to = data.to.split(',');
-
-		if (!isEmpty(data.cc))
+		
+		if (isEmpty(data.cc))
+			data.cc = config.cc.split(',');
+		else
 			data.cc = data.cc.split(',');
 
-		if (!isEmpty(data.bcc))
+		if (isEmpty(data.bcc))
+			data.bcc = config.bcc.split(',');
+		else
 			data.bcc = data.bcc.split(',');
 
-		if (!isEmpty(data.to))
-			to = data.to;
-		else
-			to = config.to;
+		if (isEmpty(data.reply_to))
+			data.reply_to = config.reply_to;
 
-		if (!isEmpty(data.cc))
-			cc = data.cc;
-		else
-			cc = config.cc;
+		if (isEmpty(data.subject))
+			data.subject = config.subject;
 
-		if (!isEmpty(data.bcc))
-			bcc = data.bcc;
-		else
-			bcc = config.bcc;
+		if (isEmpty(data.body))
+			data.body = config.body;
 
-		if (!isEmpty(data.reply_to))
-			replyTo = data.reply_to;
-		else
-			replyTo = config.reply_to;
-
-		if (!isEmpty(data.subject))
-			subject = data.subject;
-		else
-			subject = config.subject;
-
-		if (!isEmpty(data.body))
-			body = data.body;
-		else
-			body = config.body;
-
-		if (isEmpty(to))
+		if (isEmpty(data.to))
 			return platform.handleException(new Error('Kindly specify email recipients.'));
 
-		if (isEmpty(subject))
+		if (isEmpty(data.subject))
 			return platform.handleException(new Error('Kindly specify email subject.'));
 
 		var params = {
-			to: to,
-			cc: cc,
-			bcc: bcc,
+			to: data.to,
+			cc: data.cc,
+			bcc: data.bcc,
 			from: data.from || config.from,
-			subject: subject
+			subject: data.subject
 		};
 
-		delete data.to;
-		delete data.from;
-		delete data.subject;
-		delete data.body;
+		if (!isEmpty(data.reply_to))
+			params.replyto = data.reply_to;
 
-		if (!isEmpty(replyTo))
-			params.replyto = replyTo;
-
-		if (isEmpty(body))
+		if (isEmpty(data.body))
 			params.text = JSON.stringify(data, null, 4);
 		else
-			params.text = body + '\n\n' + JSON.stringify(data, null, 4);
+			params.text = data.body + '\n\n' + JSON.stringify(data, null, 4);
 
 		sendgrid.send(params, function (error) {
 			if (error) {
@@ -108,15 +87,6 @@ platform.on('close', function () {
 platform.once('ready', function (options) {
 	sendgrid = require('sendgrid')(options.apikey);
 	config = options;
-
-	if (!isEmpty(config.to))
-		config.to = config.to.split(',');
-
-	if (!isEmpty(config.cc))
-		config.cc = config.cc.split(',');
-
-	if (!isEmpty(config.bcc))
-		config.bcc = config.bcc.split(',');
 
 	platform.log('Sendgrid Connector Initialized.');
 	platform.notifyReady();

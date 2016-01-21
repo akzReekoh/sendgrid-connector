@@ -1,7 +1,7 @@
 {
   "apikey": {
 	"label": "API Key",
-	"type": "String",
+	"type": "Password",
 	"required": true,
 	"help": "Sendgrid API Key."
   },
