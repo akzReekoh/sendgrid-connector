@@ -1,11 +1,13 @@
 'use strict';
 
 const API_KEY  = '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',
-	  TO       = 'bsicam@reekoh.com',
+	  TO       = 'akzdinglasan@gmail.com',
 	  FROM     = 'help@reekoh.com',
 	  REPLY_TO = 'hello@reekoh.com',
 	  SUBJECT  = 'Sendgrid Connector Notification',
-	  BODY     = 'Test Email Notification';
+	  BODY     = 'Test Email Notification',
+	  CC = 'adinglasan@reekoh.com',
+	  BCC = 'adinglasan@reekoh.com';
 
 var cp     = require('child_process'),
 	should = require('should'),
@@ -46,7 +48,9 @@ describe('Connector', function () {
 						apikey: API_KEY,
 						to: TO,
 						from: FROM,
-						reply_to: REPLY_TO
+						reply_to: REPLY_TO,
+						cc: CC,
+						bcc: BCC
 					}
 				}
 			}, function (error) {
