@@ -16,14 +16,17 @@ var cp     = require('child_process'),
 describe('Connector', function () {
 	this.slow(8000);
 
-	after('terminate child process', function () {
+	after('terminate child process', function (done) {
+		this.timeout(7000);
+
 		connector.send({
 			type: 'close'
 		});
 
 		setTimeout(function () {
 			connector.kill('SIGKILL');
-		}, 3000);
+			done();
+		}, 5000);
 	});
 
 	describe('#spawn', function () {
@@ -60,7 +63,7 @@ describe('Connector', function () {
 	});
 
 	describe('#data', function (done) {
-		it('should process the data', function () {
+		it('should process the JSON data', function () {
 			connector.send({
 				type: 'data',
 				data: {
@@ -73,6 +76,36 @@ describe('Connector', function () {
 					o2_1hr: '19%',
 					o2_8hr: '20%'
 				}
+			}, done);
+		});
+	});
+
+	describe('#data', function (done) {
+		it('should process the Array data', function () {
+			connector.send({
+				type: 'data',
+				data: [
+					{
+						subject: SUBJECT,
+						body: BODY,
+						co2_1hr: '11%',
+						co2_8hr: '8%',
+						n_1hr: '70%',
+						n_8hr: '72%',
+						o2_1hr: '19%',
+						o2_8hr: '20%'
+					},
+					{
+						subject: SUBJECT,
+						body: BODY,
+						co2_1hr: '11%',
+						co2_8hr: '8%',
+						n_1hr: '70%',
+						n_8hr: '72%',
+						o2_1hr: '19%',
+						o2_8hr: '20%'
+					}
+				]
 			}, done);
 		});
 	});
