@@ -7,7 +7,7 @@ var isEmpty       = require('lodash.isempty'),
 	platform      = require('./platform'),
 	sendgrid, config;
 
-let sendData = (data) => {
+let sendData = (data, callback) => {
 	if (isEmpty(data.to))
 		data.to = config.to.split(',');
 	else
@@ -55,26 +55,34 @@ let sendData = (data) => {
 		params.text = data.body + '\n\n' + JSON.stringify(data, null, 4);
 
 	sendgrid.send(params, function (error) {
-		if (error) {
-			console.error(error);
-			platform.handleException(error);
-		}
-		else {
+		if (!error) {
 			platform.log(JSON.stringify({
 				title: 'Sengrid Email Sent',
 				data: params
 			}));
 		}
+
+		callback(error);
 	});
 };
 
 platform.on('data', function (data) {
-	if (isPlainObject(data)) {
-		sendData(data);
+	if(isPlainObject(data)){
+		sendData(data, (error) => {
+			if(error) {
+				console.error(error);
+				platform.handleException(error);
+			}
+		});
 	}
 	else if(isArray(data)){
-		async.each(data, (datum) => {
-			sendData(datum);
+		async.each(data, (datum, done) => {
+			sendData(datum, done);
+		}, (error) => {
+			if(error) {
+				console.error(error);
+				platform.handleException(error);
+			}
 		});
 	}
 	else
