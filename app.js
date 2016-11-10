@@ -13,13 +13,17 @@ let sendData = (data, callback) => {
 	else
 		data.to = data.to.split(',');
 
-	if (isEmpty(data.cc))
-		data.cc = config.cc.split(',');
+	if (isEmpty(data.cc)){
+        if(!isEmpty(config.cc))
+            data.cc = config.cc.split(',');
+    }
 	else
 		data.cc = data.cc.split(',');
 
-	if (isEmpty(data.bcc))
-		data.bcc = config.bcc.split(',');
+	if (isEmpty(data.bcc)){
+		if(!isEmpty(config.bcc))
+			data.bcc = config.bcc.split(',');
+	}
 	else
 		data.bcc = data.bcc.split(',');
 
